@@ -30,62 +30,77 @@ def main(page: ft.Page):
         shape=ft.RoundedRectangleBorder(radius=10),
         text_style=ft.TextStyle(size=20, weight=ft.FontWeight.BOLD)
     )
+
+    icon_tails=ft.Image(src="assets/Start_Page/icon_tails.png", width=300, height=300)
+
+    icon_knuckles=ft.Container( content=ft.Image(src="assets/Start_Page/icon_knuckles.png", width=200, height=200), margin= ft.margin.only(left=50, top=50) )
+    icon_sonic=ft.Image(src="assets/Start_Page/icon_sonic.png", width=100, height=100)
     
+
     botao_convidado = ft.ElevatedButton(
-        text="Guest Login",
+        content=ft.Container(
+            content=ft.Text("Guest Login"),
+            margin=ft.margin.only(top=100)  # Margin aplicada no Container
+        ),
         on_click=entrar_convidado,
         width=300,
         height=400,
-        bgcolor=ft.Colors.ORANGE_700,
+        bgcolor=ft.Colors.AMBER_500,
         color=ft.Colors.WHITE,
         style=button_style
     )
-    
     botao_criar_conta = ft.ElevatedButton(
-        text="Create Account",
+        content=ft.Container(
+            content=ft.Text("Create Account"),
+            margin=ft.margin.only(left=70)  # Margin aplicada no Container
+        ),
         on_click=criar_conta,
         width=250,
         height=100,
-        bgcolor=ft.Colors.ORANGE_700,
+        bgcolor=ft.Colors.BLUE_900,
         color=ft.Colors.WHITE,
         style=button_style
     )
     
     botao_login = ft.ElevatedButton(
-        text="Login",
+        content=ft.Container(
+            content=ft.Text("Login"),
+            margin=ft.margin.only(top=100),  # Margin aplicada no Container
+        ),
         on_click=ir_para_login,
         width=300,
         height=400,
-        bgcolor=ft.Colors.ORANGE_700,
+        bgcolor=ft.Colors.RED_900,
         color=ft.Colors.WHITE,
         style=button_style
     )
     
-    t1 = ft.Text(
-        "Sonic Burgers Kiosk",
-        size=40,
-        weight=ft.FontWeight.BOLD,
-        text_align=ft.TextAlign.CENTER
-    )
+    logo = ft.Image(src="assets/icons/MainLogo.png", height=650, width=650)
     
     # Main column containing all elements
     main_column = ft.Column(
         [
-            t1,
+            ft.Container(
+                content=logo,  # Logo dentro do Container
+                margin=ft.margin.only(top=-300,bottom=-170) # Adiciona margem negativa para mover a logo para cima
+            ),
             ft.Row(
-                [botao_convidado, botao_login],
+                [ft.Stack(controls=[botao_convidado,icon_tails]), ft.Stack(controls=[botao_login,icon_knuckles])],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=100
             ),
             ft.Row(
-                [botao_criar_conta],
+                [ft.Stack(controls=[botao_criar_conta,icon_sonic])],
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ],
-        alignment=ft.MainAxisAlignment.START,  # Changed from CENTER to START
+        alignment=ft.MainAxisAlignment.START,  # Mantém alinhamento no topo (START)
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        spacing=100
+        spacing=50  # Mantém o espaçamento entre os elementos
     )
+
+
+
     
     # Container to hold everything
     container = ft.Container(
