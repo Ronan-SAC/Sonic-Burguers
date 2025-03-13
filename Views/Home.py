@@ -40,10 +40,26 @@ def main(page: ft.Page):
         text_style=ft.TextStyle(size=20, weight=ft.FontWeight.BOLD)
     )
 
-    icon_tails=ft.Image(src="../assets/Start_Page/icon_tails.png", width=300, height=300)
+    icon_tails = ft.GestureDetector(
+        content=ft.Image(src="../assets/Start_Page/icon_tails.png", width=300, height=300),
+        on_tap=entrar_convidado 
+    )
 
-    icon_knuckles=ft.Container( content=ft.Image(src="../assets/Start_Page/icon_knuckles.png", width=200, height=200), margin= ft.margin.only(left=50, top=50) )
-    icon_sonic=ft.Image(src="../assets/Start_Page/icon_sonic.png", width=100, height=100)
+    icon_knuckles = ft.GestureDetector(
+        content=ft.Image(src="../assets/Start_Page/icon_knuckles.png", width=200, height=200),
+        on_tap=ir_para_login
+    )
+
+
+    icon_knuckles_with_margin = ft.Container(
+        content=icon_knuckles,
+        margin=ft.margin.only(left=50, top=50)
+    )
+
+    icon_sonic = ft.GestureDetector(
+        content=ft.Image(src="../assets/Start_Page/icon_sonic.png", width=100, height=100),
+        on_tap=criar_conta  
+    )   
     
 
     botao_convidado = ft.ElevatedButton(
@@ -94,7 +110,7 @@ def main(page: ft.Page):
                 margin=ft.margin.only(top=-300,bottom=-170) # Adiciona margem negativa para mover a logo para cima
             ),
             ft.Row(
-                [ft.Stack(controls=[botao_convidado,icon_tails]), ft.Stack(controls=[botao_login,icon_knuckles])],
+                [ft.Stack(controls=[botao_convidado,icon_tails]), ft.Stack(controls=[botao_login,icon_knuckles_with_margin])],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=100
             ),
