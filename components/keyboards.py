@@ -1,13 +1,11 @@
 import flet as ft
 
 def criar_teclados(add_to_input, backspace, clear, hide_keyboard):
-    # Estilo comum dos botões
     button_style = ft.ButtonStyle(
         shape=ft.RoundedRectangleBorder(radius=10),
         side=ft.BorderSide(width=2, color=ft.Colors.BLACK)
     )
 
-    # Teclado numérico
     numeric_keyboard = ft.Column(
         [
             ft.Row(
@@ -53,8 +51,7 @@ def criar_teclados(add_to_input, backspace, clear, hide_keyboard):
         visible=False,
         spacing=10,
     )
-
-    # Teclado completo
+    
     full_keyboard = ft.Column(
         [
             ft.Row(

@@ -1,8 +1,8 @@
 # main.py
 import flet as ft
-from Views.Home import main as home_main  # Importa a tela inicial
+from Views.Home import main as home_main  
 
 def main(page: ft.Page):
-    home_main(page)  # Chama a função que renderiza a tela inicial
+    home_main(page)  
 
 ft.app(target=main)

@@ -1,13 +1,10 @@
 # views/home.py
 import flet as ft
 import os
-
-# Adiciona o diretório raiz do projeto ao sys.path
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
-
-# Importa a função main da tela de login
 from Views.LoginPage import main as login_main
+from Views.SignUp import main as sign_main
 
 def main(page: ft.Page):
     page.title = "Sonic Burgers Kiosk"
@@ -27,7 +24,7 @@ def main(page: ft.Page):
     
     def criar_conta(e):
         page.clean()
-        page.add(ft.Text("Redirecting to account creation..."))
+        sign_main(page)
         page.update()
     
     def ir_para_login(e):
@@ -65,7 +62,7 @@ def main(page: ft.Page):
     botao_convidado = ft.ElevatedButton(
         content=ft.Container(
             content=ft.Text("Guest Login"),
-            margin=ft.margin.only(top=100)  # Margin aplicada no Container
+            margin=ft.margin.only(top=100) 
         ),
         on_click=entrar_convidado,
         width=300,
@@ -77,7 +74,7 @@ def main(page: ft.Page):
     botao_criar_conta = ft.ElevatedButton(
         content=ft.Container(
             content=ft.Text("Create Account"),
-            margin=ft.margin.only(left=70)  # Margin aplicada no Container
+            margin=ft.margin.only(left=70)  
         ),
         on_click=criar_conta,
         width=250,
@@ -90,7 +87,7 @@ def main(page: ft.Page):
     botao_login = ft.ElevatedButton(
         content=ft.Container(
             content=ft.Text("Login"),
-            margin=ft.margin.only(top=100),  # Margin aplicada no Container
+            margin=ft.margin.only(top=100), 
         ),
         on_click=ir_para_login,
         width=300,
@@ -102,12 +99,11 @@ def main(page: ft.Page):
     
     logo = ft.Image(src="../assets/icons/MainLogo.png", height=650, width=650)
     
-    # Main column containing all elements
     main_column = ft.Column(
         [
             ft.Container(
-                content=logo,  # Logo dentro do Container
-                margin=ft.margin.only(top=-300,bottom=-170) # Adiciona margem negativa para mover a logo para cima
+                content=logo,  
+                margin=ft.margin.only(top=-300,bottom=-170) 
             ),
             ft.Row(
                 [ft.Stack(controls=[botao_convidado,icon_tails]), ft.Stack(controls=[botao_login,icon_knuckles_with_margin])],
@@ -119,19 +115,15 @@ def main(page: ft.Page):
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ],
-        alignment=ft.MainAxisAlignment.START,  # Mantém alinhamento no topo (START)
+        alignment=ft.MainAxisAlignment.START,  
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        spacing=50  # Mantém o espaçamento entre os elementos
+        spacing=50  
     )
-
-
-
     
-    # Container to hold everything
     container = ft.Container(
         content=main_column,
-        alignment=ft.alignment.top_center,  # Changed to top_center
-        padding=ft.padding.only(top=200),  # Adds 200px padding from the top
+        alignment=ft.alignment.top_center,  
+        padding=ft.padding.only(top=200), 
         width=1080,
         height=1920
     )
