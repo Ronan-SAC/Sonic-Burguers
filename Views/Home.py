@@ -41,12 +41,12 @@ def main(page: ft.Page):
     )
 
     icon_tails = ft.GestureDetector(
-        content=ft.Image(src="./assets/Start_Page/icon_tails.png", width=300, height=300),
+        content=ft.Image(src="../assets/Start_Page/icon_tails.png", width=300, height=300),
         on_tap=entrar_convidado 
     )
 
     icon_knuckles = ft.GestureDetector(
-        content=ft.Image(src="./assets/Start_Page/icon_knuckles.png", width=200, height=200),
+        content=ft.Image(src="../assets/Start_Page/icon_knuckles.png", width=200, height=200),
         on_tap=ir_para_login
     )
 
@@ -57,7 +57,7 @@ def main(page: ft.Page):
     )
 
     icon_sonic = ft.GestureDetector(
-        content=ft.Image(src="./assets/Start_Page/icon_sonic.png", width=100, height=100),
+        content=ft.Image(src="../assets/Start_Page/icon_sonic.png", width=100, height=100),
         on_tap=criar_conta  
     )   
     
@@ -81,7 +81,7 @@ def main(page: ft.Page):
         ),
         on_click=criar_conta,
         width=250,
-        height=150,
+        height=100,
         bgcolor=ft.Colors.BLUE_900,
         color=ft.Colors.WHITE,
         style=button_style
@@ -100,7 +100,7 @@ def main(page: ft.Page):
         style=button_style
     )
     
-    logo = ft.Image(src="./assets/icons/MainLogo.png", height=650, width=650)
+    logo = ft.Image(src="../assets/icons/MainLogo.png", height=650, width=650)
     
     # Main column containing all elements
     main_column = ft.Column(
@@ -115,11 +115,11 @@ def main(page: ft.Page):
                 spacing=100
             ),
             ft.Row(
-                [ft.Stack(controls=[botao_criar_conta,ft.Container(content=icon_sonic, margin=ft.margin.only(top=30))])],
+                [ft.Stack(controls=[botao_criar_conta,icon_sonic])],
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ],
-        alignment=ft.MainAxisAlignment.SPACE_EVENLY,  # Mantém alinhamento no topo (START)
+        alignment=ft.MainAxisAlignment.START,  # Mantém alinhamento no topo (START)
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         spacing=50  # Mantém o espaçamento entre os elementos
     )
