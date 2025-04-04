@@ -12,25 +12,25 @@ def criar_teclados(add_to_input, backspace, clear, hide_keyboard):
         [
             ft.Row(
                 [ft.ElevatedButton(text=str(i), on_click=add_to_input, width=65, height=65,
-                                 bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
-                                 style=button_style)
-                 for i in [7, 8, 9]],
+                                bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
+                                style=button_style)
+                for i in [7, 8, 9]],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=10,
             ),
             ft.Row(
                 [ft.ElevatedButton(text=str(i), on_click=add_to_input, width=65, height=65,
-                                 bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
-                                 style=button_style)
-                 for i in [4, 5, 6]],
+                                bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
+                                style=button_style)
+                for i in [4, 5, 6]],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=10,
             ),
             ft.Row(
                 [ft.ElevatedButton(text=str(i), on_click=add_to_input, width=65, height=65,
-                                 bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
-                                 style=button_style)
-                 for i in [1, 2, 3]],
+                                bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
+                                style=button_style)
+                for i in [1, 2, 3]],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=10,
             ),
@@ -59,30 +59,30 @@ def criar_teclados(add_to_input, backspace, clear, hide_keyboard):
         [
             ft.Row(
                 [ft.ElevatedButton(text=char, on_click=add_to_input, width=55, height=55,
-                                 bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
-                                 style=button_style)
-                 for char in "1234567890"],
+                                bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
+                                style=button_style)
+                for char in "1234567890"],
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
             ft.Row(
                 [ft.ElevatedButton(text=char, on_click=add_to_input, width=55, height=55,
-                                 bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
-                                 style=button_style)
-                 for char in "QWERTYUIOP"],
+                                bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
+                                style=button_style)
+                for char in "QWERTYUIOP"],
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
             ft.Row(
                 [ft.ElevatedButton(text=char, on_click=add_to_input, width=55, height=55,
-                                 bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
-                                 style=button_style)
-                 for char in "ASDFGHJKL"],
+                                bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
+                                style=button_style)
+                for char in "ASDFGHJKL"],
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
             ft.Row(
                 [ft.ElevatedButton(text=char, on_click=add_to_input, width=55, height=55,
-                                 bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
-                                 style=button_style)
-                 for char in "ZXCVBNM"],
+                                bgcolor=ft.Colors.BLUE_700, color=ft.Colors.WHITE,
+                                style=button_style)
+                for char in "ZXCVBNM"],
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
             ft.Row(
