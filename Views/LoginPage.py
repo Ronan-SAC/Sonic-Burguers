@@ -1,36 +1,24 @@
-# views/login.py
 import flet as ft
-import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-import mysql.connector
 from components.keyboards import criar_teclados
-from components.utils import validar_e_formatar_cpf
+from components.utils import validar_cpf 
 
 def main(page: ft.Page):
-    page.window.maximizable = False
-    page.title = "SonicBurger - Login"
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.bgcolor = ft.Colors.AMBER_100
-    page.window.width = 1080
-    page.window.height = 2000
-    page.window.resizable = False
-    page.window.center()
-
-    logo = ft.Image(src="../assets/icons/MainLogo.png")
-    mensagem = ft.Text("", color=ft.Colors.BLACK, size=32)
-
-    def on_login_click(e):
-        cpf_valido, cpf_resultado = validar_e_formatar_cpf(CPF_TEXT.value)
-        CPF_TEXT.value = cpf_resultado
-        if cpf_valido:
-            mensagem.value = "Corrida concluída!"
-            mensagem.color = ft.Colors.GREEN
-            page.controls.clear()
+    # Initialize keyboard
+    keyboard = criar_teclados(page)
+    
+    def show_keyboard(field, keyboard_type):
+        page.campo_ativo = field
+        if keyboard_type == "numeric":
+            keyboard.numeric_keyboard.visible = True
+            keyboard.full_keyboard.visible = False
         else:
-            mensagem.value = "CPF inválido"
-            mensagem.color = ft.Colors.RED
+            keyboard.numeric_keyboard.visible = False
+            keyboard.full_keyboard.visible = True
         page.update()
+
+    # UI Elements
+    logo = ft.Image(src="assets/icons/MainLogo.png", width=650, height=650)
+    mensagem = ft.Text("", color=ft.Colors.BLACK, size=32)
 
     CPF_TEXT = ft.TextField(
         label="Digite seu CPF",
@@ -42,10 +30,14 @@ def main(page: ft.Page):
         bgcolor=ft.Colors.BLUE_700,
         icon=ft.Icons.SPEED,
         read_only=True,
+        on_focus=lambda e: show_keyboard(CPF_TEXT, "numeric"),
+        max_length=11
     )
+    
     Senha = ft.TextField(
         label="Digite sua senha",
         password=True,
+        can_reveal_password=True,
         width=825,
         border_radius=10,
         border_color=ft.Colors.BLUE_900,
@@ -54,118 +46,80 @@ def main(page: ft.Page):
         bgcolor=ft.Colors.BLUE_700,
         icon=ft.Icons.LOCK,
         read_only=True,
+        on_focus=lambda e: show_keyboard(Senha, "full")
     )
 
-    campo_ativo = None
-
-    def add_to_input(e):
-        char = e.control.text
-        if campo_ativo == CPF_TEXT:
-            CPF_TEXT.value += char
-            valido, resultado = validar_e_formatar_cpf(CPF_TEXT.value)
-            CPF_TEXT.value = resultado
-            if len(''.join(filter(str.isdigit, CPF_TEXT.value))) == 11:
-                if valido:
-                    CPF_TEXT.border_color = ft.Colors.GREEN
-                    mensagem.value = "CPF válido!"
-                    mensagem.color = ft.Colors.GREEN
-                else:
-                    CPF_TEXT.border_color = ft.Colors.RED
-                    mensagem.value = "CPF inválido"
-                    mensagem.color = ft.Colors.RED
-            else:
-                CPF_TEXT.border_color = ft.Colors.BLUE_900
-                mensagem.value = ""
-        elif campo_ativo == Senha:
-            Senha.value += char
+    def on_login_click(e):
+        if not CPF_TEXT.value or not Senha.value:
+            mensagem.value = "Por favor, preencha CPF e senha"
+            mensagem.color = ft.Colors.RED
+        elif len(CPF_TEXT.value) < 11:
+            mensagem.value = "CPF deve ter 11 dígitos"
+            mensagem.color = ft.Colors.RED
+        elif not validar_cpf(CPF_TEXT.value):
+            mensagem.value = "CPF inválido"
+            mensagem.color = ft.Colors.RED
+        else:
+            mensagem.value = "Login bem-sucedido!"
+            mensagem.color = ft.Colors.GREEN
+            page.go("/menu")
         page.update()
 
-    def backspace(e):
-        if campo_ativo == CPF_TEXT:
-            CPF_TEXT.value = CPF_TEXT.value[:-1]
-            valido, resultado = validar_e_formatar_cpf(CPF_TEXT.value)
-            CPF_TEXT.value = resultado
-            if len(''.join(filter(str.isdigit, CPF_TEXT.value))) < 11:
-                CPF_TEXT.border_color = ft.Colors.BLUE_900
-                mensagem.value = ""
-            else:
-                if valido:
-                    CPF_TEXT.border_color = ft.Colors.GREEN
-                    mensagem.value = "CPF válido!"
-                    mensagem.color = ft.Colors.GREEN
-                else:
-                    CPF_TEXT.border_color = ft.Colors.RED
-                    mensagem.value = "CPF inválido"
-                    mensagem.color = ft.Colors.RED
-        elif campo_ativo == Senha:
-            Senha.value = Senha.value[:-1]
-        page.update()
-
-    def clear(e):
-        if campo_ativo == CPF_TEXT:
-            CPF_TEXT.value = ""
-            CPF_TEXT.border_color = ft.Colors.BLUE_900
-            mensagem.value = ""
-        elif campo_ativo == Senha:
-            Senha.value = ""
-        page.update()
-
-    def hide_keyboard(e):
-        numeric_keyboard.visible = False
-        full_keyboard.visible = False
-        page.update()
-
-    numeric_keyboard, full_keyboard = criar_teclados(add_to_input, backspace, clear, hide_keyboard)
-
-    def show_keyboard(e):
-        nonlocal campo_ativo
-        campo_ativo = e.control
-        if campo_ativo == CPF_TEXT:
-            numeric_keyboard.visible = True
-            full_keyboard.visible = False
-        elif campo_ativo == Senha:
-            full_keyboard.visible = True
-            numeric_keyboard.visible = False
-        page.update()
-
-    CPF_TEXT.on_click = show_keyboard
-    Senha.on_click = show_keyboard
-
+    # Buttons
     Logar = ft.ElevatedButton(
         "Correr!",
         bgcolor=ft.Colors.RED_600,
         color=ft.Colors.WHITE,
-        width=790,
+        width=400,
         height=50,
         elevation=8,
         style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=10)),
         on_click=on_login_click,
-        tooltip="Corrida concluída",
     )
 
-    running_icon = ft.Icon(name=ft.Icons.DIRECTIONS_RUN, color=ft.Colors.GREY_700, size=36)
-
-    button_row = ft.Row(
-        controls=[running_icon, Logar],
-        spacing=10,
-        vertical_alignment=ft.CrossAxisAlignment.CENTER,
-        alignment=ft.MainAxisAlignment.CENTER,
+    voltar_button = ft.ElevatedButton(
+        "Voltar",
+        bgcolor=ft.Colors.BLUE_700,
+        color=ft.Colors.WHITE,
+        width=350,
+        height=50,
+        elevation=8,
+        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=10)),
+        on_click=lambda e: page.go("/"),
     )
 
+    # Layout
     login_form = ft.Column(
         controls=[
             logo,
             CPF_TEXT,
             Senha,
-            button_row,
+            ft.Row(
+                controls=[
+                    ft.Icon(name=ft.Icons.DIRECTIONS_RUN, color=ft.Colors.GREY_700, size=36),
+                    Logar,
+                    voltar_button
+                ],
+                spacing=10,
+                alignment=ft.MainAxisAlignment.CENTER,
+            ),
             ft.Container(height=5),
             mensagem,
-            numeric_keyboard,
-            full_keyboard,
+            keyboard.numeric_keyboard,
+            keyboard.full_keyboard,
         ],
         spacing=20,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        alignment=ft.MainAxisAlignment.CENTER,
     )
 
-    page.add(login_form)
-    page.update()
+    return ft.View(
+        route="/login",
+        controls=[login_form],
+        bgcolor=ft.Colors.AMBER_100,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        vertical_alignment=ft.MainAxisAlignment.CENTER,
+    )
+
+if __name__ == "__main__":
+    ft.app(target=main)

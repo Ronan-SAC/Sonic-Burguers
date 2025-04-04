@@ -2,51 +2,40 @@
 import flet as ft
 import os
 import sys
+
+# Configura o caminho para importar módulos de outras pastas
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
-from Views.LoginPage import main as login_main
-from Views.SignUp import main as sign_main
 
 def main(page: ft.Page):
-    page.title = "Sonic Burgers Kiosk"
-    page.horizontal_alignment = ft.MainAxisAlignment.CENTER
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.bgcolor = ft.Colors.AMBER_100
-    page.window.width = 1080
-    page.window.height = 1920
-    page.window.resizable = False
-    page.window.center()
-    page.window.maximizable = False
-    
+    # Funções de navegação
     def entrar_convidado(e):
-        page.clean()
-        page.add(ft.Text("Entering as guest..."))
-        page.update()
+        """Navega para modo convidado"""
+        page.go("/guest")  # Sugestão: criar uma rota específica para guest
     
     def criar_conta(e):
-        page.clean()
-        sign_main(page)
-        page.update()
+        """Navega para página de cadastro"""
+        page.go("/sign")
     
     def ir_para_login(e):
-        page.clean()
-        login_main(page)
-        page.update()
+        """Navega para página de login"""
+        page.go("/login")
     
+    # Estilo dos botões
     button_style = ft.ButtonStyle(
         shape=ft.RoundedRectangleBorder(radius=10),
         text_style=ft.TextStyle(size=20, weight=ft.FontWeight.BOLD)
     )
 
+    # Ícones interativos
     icon_tails = ft.GestureDetector(
-        content=ft.Image(src="../assets/Start_Page/icon_tails.png", width=300, height=300),
+        content=ft.Image(src="assets/Start_Page/icon_tails.png", width=300, height=300),
         on_tap=entrar_convidado 
     )
 
     icon_knuckles = ft.GestureDetector(
-        content=ft.Image(src="../assets/Start_Page/icon_knuckles.png", width=200, height=200),
+        content=ft.Image(src="assets/Start_Page/icon_knuckles.png", width=200, height=200),
         on_tap=ir_para_login
     )
-
 
     icon_knuckles_with_margin = ft.Container(
         content=icon_knuckles,
@@ -54,14 +43,14 @@ def main(page: ft.Page):
     )
 
     icon_sonic = ft.GestureDetector(
-        content=ft.Image(src="../assets/Start_Page/icon_sonic.png", width=100, height=100),
+        content=ft.Image(src="assets/Start_Page/icon_sonic.png", width=100, height=100),
         on_tap=criar_conta  
     )   
     
-
+    # Botões
     botao_convidado = ft.ElevatedButton(
         content=ft.Container(
-            content=ft.Text("Guest Login"),
+            content=ft.Text("Login Convidado"),
             margin=ft.margin.only(top=100) 
         ),
         on_click=entrar_convidado,
@@ -71,9 +60,10 @@ def main(page: ft.Page):
         color=ft.Colors.WHITE,
         style=button_style
     )
+    
     botao_criar_conta = ft.ElevatedButton(
         content=ft.Container(
-            content=ft.Text("Create Account"),
+            content=ft.Text("Criar Conta"),
             margin=ft.margin.only(left=70)  
         ),
         on_click=criar_conta,
@@ -97,21 +87,26 @@ def main(page: ft.Page):
         style=button_style
     )
     
-    logo = ft.Image(src="../assets/icons/MainLogo.png", height=650, width=650)
+    # Logo
+    logo = ft.Image(src="assets/icons/MainLogo.png", height=650, width=650)
     
+    # Layout principal
     main_column = ft.Column(
         [
             ft.Container(
                 content=logo,  
-                margin=ft.margin.only(top=-300,bottom=-170) 
+                margin=ft.margin.only(top=-300, bottom=-170) 
             ),
             ft.Row(
-                [ft.Stack(controls=[botao_convidado,icon_tails]), ft.Stack(controls=[botao_login,icon_knuckles_with_margin])],
+                [
+                    ft.Stack(controls=[botao_convidado, icon_tails]), 
+                    ft.Stack(controls=[botao_login, icon_knuckles_with_margin])
+                ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=100
             ),
             ft.Row(
-                [ft.Stack(controls=[botao_criar_conta,icon_sonic])],
+                [ft.Stack(controls=[botao_criar_conta, icon_sonic])],
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ],
@@ -120,6 +115,7 @@ def main(page: ft.Page):
         spacing=50  
     )
     
+    # Container principal
     container = ft.Container(
         content=main_column,
         alignment=ft.alignment.top_center,  
@@ -128,6 +124,14 @@ def main(page: ft.Page):
         height=1920
     )
     
-    page.add(container)
-    page.update()
+    # Retorna a view em vez de adicionar diretamente
+    return ft.View(
+        route="/",
+        controls=[container],
+        bgcolor=ft.Colors.AMBER_100,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        vertical_alignment=ft.MainAxisAlignment.CENTER
+    )
 
+if __name__ == "__main__":
+    ft.app(target=main)
