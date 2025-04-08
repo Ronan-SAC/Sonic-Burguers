@@ -30,7 +30,7 @@ def main(page: ft.Page):
         
         view_handler = route_handlers.get(page.route, home_main)
         page.views.append(view_handler(page))
-        page.update()
+        page.update() 
 
     def view_pop(view):
         if len(page.views) > 1:  

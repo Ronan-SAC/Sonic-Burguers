@@ -53,37 +53,3 @@ def validar_senha(senha):
     if len(senha) < 8:
         return False, "A senha deve ter pelo menos 8 caracteres"
     return True, ""
-
-
-
-def formatar_cpf(cpf):
-    """Formata o CPF no padrão XXX.XXX.XXX-XX"""
-    cpf = ''.join(filter(str.isdigit, cpf))  # Remove caracteres não numéricos
-    if len(cpf) > 11:
-        cpf = cpf[:11]  # Limita a 11 dígitos
-    
-    # Formatação progressiva durante a digitação
-    if len(cpf) <= 3:
-        return cpf
-    elif 3 < len(cpf) <= 6:
-        return f"{cpf[:3]}.{cpf[3:]}"
-    elif 6 < len(cpf) <= 9:
-        return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:]}"
-    else:
-        return f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:11]}"
-
-def formatar_telefone(telefone):
-    """Formata o telefone no padrão (XX) XXXXX-XXXX"""
-    telefone = ''.join(filter(str.isdigit, telefone))  # Remove caracteres não numéricos
-    if len(telefone) > 11:
-        telefone = telefone[:11]  # Limita a 11 dígitos
-    
-    # Formatação progressiva durante a digitação
-    if len(telefone) == 0:
-        return ""
-    elif len(telefone) <= 2:
-        return f"({telefone}"
-    elif len(telefone) <= 7:
-        return f"({telefone[:2]}) {telefone[2:]}"
-    else:
-        return f"({telefone[:2]}) {telefone[2:7]}-{telefone[7:11]}"

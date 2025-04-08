@@ -1,6 +1,6 @@
 import flet as ft
 from components.keyboards import criar_teclados
-from components.utils import validar_nome, validar_telefone, validar_cpf, validar_senha, formatar_cpf, formatar_telefone
+from components.utils import validar_nome, validar_telefone, validar_cpf, validar_senha
 
 def main(page: ft.Page):
     # Initialize keyboard
@@ -48,15 +48,6 @@ def main(page: ft.Page):
         max_length=15  
     )
 
-    def on_telefone_change(e):
-        digits = ''.join(filter(str.isdigit, e.control.value))
-        formatted = formatar_telefone(digits)
-        if e.control.value != formatted:
-            e.control.value = formatted
-        e.control.update()
-
-    Telefone.on_change = on_telefone_change
-
     CPF_TEXT = ft.TextField(
         label="Digite seu CPF",
         width=825,
@@ -70,15 +61,6 @@ def main(page: ft.Page):
         on_focus=lambda e: show_keyboard(CPF_TEXT, "numeric"),
         max_length=14
     )
-
-    def on_cpf_change(e):
-        digits = ''.join(filter(str.isdigit, e.control.value))
-        formatted = formatar_cpf(digits)
-        if e.control.value != formatted:
-            e.control.value = formatted
-        e.control.update()
-
-    CPF_TEXT.on_change = on_cpf_change
 
     Senha = ft.TextField(
         label="Digite sua senha",
