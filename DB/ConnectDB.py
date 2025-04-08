@@ -36,7 +36,7 @@ class Banco_De_Dados:
             return False
         
         # Monta a query com os campos a atualizar
-        query = f"UPDATE usuarios SET {','.join(campos)} WHERE id = %s"  # Corrigido: Nome da tabela e WHERE
+        query = f"UPDATE usuarios SET {','.join(campos)} WHERE id = %s"  # 
         valores.append(id)
 
         # Executa a query

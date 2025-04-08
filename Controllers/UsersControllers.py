@@ -1,4 +1,4 @@
-from model.modelo import Banco_De_Dados
+from DB.ConnectDB import Banco_De_Dados
 
 class Controller_user:
     def __init__(self):

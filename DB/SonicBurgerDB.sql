@@ -8,6 +8,4 @@ cpf int(11) not null,
 senha varchar(500) not null
 );
 
-insert into usuarios values(default,"talita motta","01103332171","gui0207ka");
-
 select * from usuarios
