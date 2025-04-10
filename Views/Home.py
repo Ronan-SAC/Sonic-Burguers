@@ -10,7 +10,7 @@ def main(page: ft.Page):
     # Funções de navegação
     def entrar_convidado(e):
         """Navega para modo convidado"""
-        page.go("/guest")  # Sugestão: criar uma rota específica para guest
+        page.go("/menu")  # Sugestão: criar uma rota específica para guest
     
     def criar_conta(e):
         """Navega para página de cadastro"""
@@ -64,7 +64,7 @@ def main(page: ft.Page):
     botao_criar_conta = ft.ElevatedButton(
         content=ft.Container(
             content=ft.Text("Criar Conta"),
-            margin=ft.margin.only(left=70)  
+            margin=ft.margin.only(left=70,)  
         ),
         on_click=criar_conta,
         width=250,
@@ -88,14 +88,14 @@ def main(page: ft.Page):
     )
     
     # Logo
-    logo = ft.Image(src="assets/icons/MainLogo.png", height=650, width=650)
+    logo = ft.Image(src="assets/icons/MainLogo.png", height=750, width=750)
     
     # Layout principal
     main_column = ft.Column(
         [
             ft.Container(
                 content=logo,  
-                margin=ft.margin.only(top=-300, bottom=-170) 
+                margin=ft.margin.only(top=-500, bottom=-250) 
             ),
             ft.Row(
                 [
@@ -110,7 +110,7 @@ def main(page: ft.Page):
                 alignment=ft.MainAxisAlignment.CENTER
             )
         ],
-        alignment=ft.MainAxisAlignment.START,  
+        alignment=ft.MainAxisAlignment.SPACE_EVENLY,  
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         spacing=50  
     )

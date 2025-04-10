@@ -85,7 +85,7 @@ def main(page: ft.Page):
         height=50,
         elevation=8,
         style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=10)),
-        on_click=lambda e: page.go("/"),
+        on_click=lambda e: page.go("/home"),
     )
 
     # Layout

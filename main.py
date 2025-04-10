@@ -1,13 +1,12 @@
-# main.py
 import flet as ft
 from Views.Home import main as home_main
 from Views.LoginPage import main as login_main 
 from Views.SignUp import main as sign_main
+from Views.Interlude import main as interlude_main
+from Views.Menu_page import main as menu_main
 
 def main(page: ft.Page):
     page.title = "Toten Sonic Burguers"
-    
-    page.title = "SonicBurger - Criar Conta"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.bgcolor = ft.Colors.AMBER_500
     page.window.width = 1080
@@ -19,18 +18,21 @@ def main(page: ft.Page):
     page.padding = 0
     
     def route_change(route):
-       
         page.views.clear()
         
         route_handlers = {
-            "/": home_main,
+            "/": interlude_main,
+            "/home": home_main,
             "/login": login_main,
-            "/sign": sign_main
+            "/sign": sign_main,
+            "/menu": menu_main
         }
         
         view_handler = route_handlers.get(page.route, home_main)
-        page.views.append(view_handler(page))
-        page.update() 
+        new_view = view_handler(page)
+        new_view.padding = 0  # Garante que todas as views tenham padding zero
+        page.views.append(new_view)
+        page.update()
 
     def view_pop(view):
         if len(page.views) > 1:  

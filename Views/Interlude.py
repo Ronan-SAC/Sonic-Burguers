@@ -1,28 +1,10 @@
 import flet as ft
-import os
-import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
-
-from Views.Home import main as Home
-
-def interlude_page(page: ft.Page):
-    page.window.maximizable = False
-    page.window.maximized = True
-    page.title = "SonicBurger - Interlude"
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER  
-    page.window.width = 1080
-    page.window.height = 1920
-    page.window.resizable = False
-    page.window.center()
-    page.window.focused = True
-    page.fullscreen = True 
-    page.window.full_screen = True
-    page.padding = 0
+def main(page: ft.Page):
 
     def ir_home(e):
         page.clean()
-        Home(page)
+        page.go("/home")
         page.update()
 
     bg = ft.Container(
@@ -31,7 +13,7 @@ def interlude_page(page: ft.Page):
             fit=ft.ImageFit.COVER,
             width=1080,
             height=1920,    
-        )
+        ),
     )
 
     button_style = ft.ButtonStyle(
@@ -58,7 +40,7 @@ def interlude_page(page: ft.Page):
         
     )
 
-    safe = ft.Stack(
+    container = ft.Stack(
         controls=[
             bg,
             ft.Column(
@@ -78,6 +60,13 @@ def interlude_page(page: ft.Page):
         height=1920        
     )
 
-    page.add(safe)
+    return ft.View(
+        route="/interlude",
+        controls=[container],
+        bgcolor=ft.Colors.AMBER_100,
+        horizontal_alignment=ft.CrossAxisAlignment.START,
+        vertical_alignment=ft.MainAxisAlignment.CENTER
+    )
 
-ft.app(target=interlude_page)
+if __name__ == "__main__":
+    ft.app(target=main)

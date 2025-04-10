@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from components.Cards import botao_bk_style
 
 
-def Menu_page(page: ft.Page):
+def main(page: ft.Page):
 
     #função de click 
     def on_botao_click(e):
@@ -57,7 +57,13 @@ def Menu_page(page: ft.Page):
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
     )
 
-    page.add(conteudo)
+    return ft.View(
+        route="/menu",
+        controls=[conteudo],
+        bgcolor=ft.Colors.AMBER_100,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        vertical_alignment=ft.MainAxisAlignment.START,
+    )
 
 if __name__ == "__main__":
-    ft.app(target=Menu_page)
+    ft.app(target=main)
