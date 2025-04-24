@@ -10,7 +10,7 @@ def main(page: ft.Page):
     # Funções de navegação
     def entrar_convidado(e):
         """Navega para modo convidado"""
-        page.go("/menu")  # Sugestão: criar uma rota específica para guest
+        page.go("/tipo_pedido")  # Sugestão: criar uma rota específica para guest
     
     def criar_conta(e):
         """Navega para página de cadastro"""

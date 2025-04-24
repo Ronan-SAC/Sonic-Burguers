@@ -3,12 +3,13 @@ from Views.Home import main as home_main
 from Views.LoginPage import main as login_main 
 from Views.SignUp import main as sign_main
 from Views.Interlude import main as interlude_main
-from Views.Menu_page import main as menu_main
+from Views.TipoPedido import main as tipo_pedido_main  # Importa a nova página
+from Views.PedidosCategoria import main as pedidos_categoria_main  # Importa a nova página
 
 def main(page: ft.Page):
     page.title = "Toten Sonic Burguers"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    page.bgcolor = ft.Colors.AMBER_500
+    page.bgcolor = ft.Colors.AMBER_100
     page.window.width = 1080
     page.window.height = 1920 
     page.window.resizable = False
@@ -25,12 +26,30 @@ def main(page: ft.Page):
             "/home": home_main,
             "/login": login_main,
             "/sign": sign_main,
-            "/menu": menu_main
+            "/tipo_pedido": tipo_pedido_main,  # Nova rota
+            "/pedidos/carne": pedidos_categoria_main,
+            "/pedidos/frango": pedidos_categoria_main,
+            "/pedidos/combos": pedidos_categoria_main,
+            "/pedidos/acompanhamentos": pedidos_categoria_main,
+            "/pedidos/bebidas_sobremesas": pedidos_categoria_main,
         }
         
         view_handler = route_handlers.get(page.route, home_main)
         new_view = view_handler(page)
-        new_view.padding = 0  # Garante que todas as views tenham padding zero
+        
+        if new_view is None:
+            print(f"Erro: view_handler retornou None para a rota {page.route}")
+            new_view = ft.View(
+                route=page.route,
+                controls=[
+                    ft.Text(f"Erro: View não encontrada para {page.route}", size=20, color=ft.colors.RED)
+                ],
+                bgcolor=ft.Colors.AMBER_100,
+                padding=20
+            )
+        
+        new_view.padding = 0
+        new_view.bgcolor = page.bgcolor  # Garante consistência com o bgcolor da página
         page.views.append(new_view)
         page.update()
 
@@ -43,7 +62,7 @@ def main(page: ft.Page):
     page.on_route_change = route_change
     page.on_view_pop = view_pop
     
-    page.go(page.route if page.route else "/")
+    page.go(page.route if page.route else "/tipo_pedido")  # Inicia na página de tipo de pedido
 
 if __name__ == "__main__":
     ft.app(target=main)
