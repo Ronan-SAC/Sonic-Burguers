@@ -307,7 +307,7 @@ def main(page: ft.Page):
                 padding=ft.padding.only(top=20)
             ),
             ft.Divider(height=20, color=ft.colors.TRANSPARENT),
-            carrinho
+            ft.Container(content= carrinho,  margin= ft.margin.only(top=560))
         ],
         alignment=ft.MainAxisAlignment.START,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
