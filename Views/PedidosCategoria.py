@@ -18,7 +18,7 @@ itens_lanche = [
             {"nome": "Picles", "quantidade": 4},
             {"nome": "Cebola", "quantidade": 2}
         ],
-        "imagem": "https://www.burgerking.com.br/assets/images/og/whopper.jpg",
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
         "categoria": "carne"
     },
     {
@@ -30,49 +30,49 @@ itens_lanche = [
             {"nome": "Alface", "quantidade": 2},
             {"nome": "Maionese", "quantidade": 1}
         ],
-        "imagem": "https://www.burgerking.com.br/assets/images/og/chicken.jpg",
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/BK-Chicken-Crispy-thumb.png?mtime=20230125075509&focal=none",
         "categoria": "frango"
     },
     {
         "nome": "Fries",
         "valor": 12.90,
-        "imagem": "https://www.burgerking.com.br/assets/images/og/fries.jpg",
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR98FtNSxebKF-I5dZEgSf9QbFCaGQ4XRVzA&s",
         "categoria": "acompanhamentos"
     },
     {
         "nome": "Nuggets",
         "valor": 19.90,
-        "imagem": "https://www.burgerking.com.br/assets/images/og/nuggets.jpg",
+        "imagem": "https://wp-cdn.typhur.com/wp-content/uploads/2025/02/air-fryer-frozen-chicken-nuggets.jpg",
         "categoria": "frango"
     },
     {
         "nome": "Combo 1",
         "valor": 39.90,
-        "imagem": "https://www.burgerking.com.br/assets/images/og/combo1.jpg",
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/1-C-Chicken-Crispy-app-thumb-cupom-m-d.png?mtime=20230703165033&focal=none",
         "categoria": "combos"
     },
     {
         "nome": "Combo 2",
         "valor": 44.90,
-        "imagem": "https://www.burgerking.com.br/assets/images/og/combo2.jpg",
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQREHs1qMFNx8TTFiplwEzfbhwuT6vTfw6zrQ&s",
         "categoria": "combos"
     },
     {
         "nome": "Soda",
         "valor": 9.90,
-        "imagem": "https://www.burgerking.com.br/assets/images/og/soda.jpg",
+        "imagem": "https://upload.wikimedia.org/wikipedia/commons/e/e8/15-09-26-RalfR-WLC-0098_-_Coca-Cola_glass_bottle_%28Germany%29.jpg",
         "categoria": "bebidas_sobremesas"
     },
     {
         "nome": "Shake",
         "valor": 14.90,
-        "imagem": "https://www.burgerking.com.br/assets/images/og/shake.jpg",
+        "imagem": "https://static.itdg.com.br/images/1200-630/ee9c780da91c8377e7f6a10f30c6c1da/milk-shake-caseiro.jpg",
         "categoria": "bebidas_sobremesas"
     },
     {
         "nome": "Dessert",
         "valor": 7.90,
-        "imagem": "https://www.burgerking.com.br/assets/images/og/dessert.jpg",
+        "imagem": "https://images.rappi.com.br/restaurants_background/sobremesas_burger_king-1662576783697.jpg?e=webp&d=700x100&q=10",
         "categoria": "bebidas_sobremesas"
     },
 ]
@@ -118,6 +118,11 @@ def main(page: ft.Page):
                                     icon=ft.icons.DELETE_OUTLINE,
                                     icon_color=ft.colors.RED_400,
                                     on_click=lambda e, item=item: remover_item(item)
+                                ),
+                                ft.IconButton(
+                                    icon=ft.icons.EDIT_OUTLINED,
+                                    icon_color=ft.colors.BLUE_400,
+                                    on_click=lambda e, item=item: editar_lanche(item)
                                 )
                             ],
                             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
@@ -147,6 +152,11 @@ def main(page: ft.Page):
     def remover_item(item):
         carrinho_itens.remove(item)
         atualizar_carrinho()
+
+    # Função para editar lanche
+    def editar_lanche(item):
+        page.go(f"/Editar_Pedido/{item}")
+        page.update()
 
     # Função de clique nos botões do menu
     def on_botao_click(e):
@@ -314,6 +324,3 @@ def main(page: ft.Page):
         vertical_alignment=ft.MainAxisAlignment.START,
         padding=0
     )
-
-if __name__ == "__main__":
-    ft.app(target=main)

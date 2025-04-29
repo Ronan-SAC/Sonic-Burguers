@@ -78,6 +78,7 @@ def main(page: ft.Page):
     # Conteúdo principal
     conteudo = ft.Column(
         controls=[
+            imagem_topo,
             ft.Container(
                 content=ft.Row(
                     controls=[botao_voltar],
@@ -85,7 +86,6 @@ def main(page: ft.Page):
                 ),
                 padding=ft.padding.only(left=20, top=20)
             ),
-            imagem_topo,
             ft.Container(
                 content=grid_categorias,
                 alignment=ft.alignment.center,
