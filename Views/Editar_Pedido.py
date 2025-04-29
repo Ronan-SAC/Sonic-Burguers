@@ -5,7 +5,7 @@ def main(page: ft.Page):
     page.title = "Modificar Lanche"
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = 20
-    page.bgcolor = ft.colors.ORANGE_50  # Fundo laranja claro, inspirado no BK
+    page.bgcolor = ft.colors.AMBER_100  
 
     # Extrai o nome do lanche da rota
     lanche_nome = page.route.split("/")[-1] if page.route.startswith("/Editar_Pedido/") else "Whopper"
@@ -247,7 +247,7 @@ def main(page: ft.Page):
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         ),
         padding=20,
-        bgcolor=ft.colors.ORANGE_100,  # Fundo interno mais claro
+        bgcolor=ft.colors.AMBER_100, 
         border_radius=15,
         border=ft.border.all(2, ft.colors.RED_800),
     )
