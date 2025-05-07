@@ -60,10 +60,6 @@ def main(page: ft.Page):
             }.get(ing["nome"], 1.00)) for ing in lanche_info.get("ingredientes", [])
         ]
     ]
-    ingredientes_extras = [
-        {"nome": "Queijo", "quantidade": 0, "preco": 2.50, "imagem": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s"},
-        {"nome": "Bacon", "quantidade": 0, "preco": 3.00, "imagem": "https://static.vecteezy.com/system/resources/previews/025/222/207/non_2x/bacon-slices-isolated-on-transparent-background-png.png"},
-    ]
 
     # Mapeamento de imagens para ingredientes
     imagens_ingredientes = {
@@ -71,11 +67,6 @@ def main(page: ft.Page):
         "Tomate": "https://static.vecteezy.com/system/resources/thumbnails/045/911/368/small/a-tomato-is-cut-in-half-and-has-a-small-drop-of-water-on-it-stock-png.png",
         "Cebola": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
         "Picles": "https://static.vecteezy.com/system/resources/previews/045/905/548/non_2x/stack-of-sliced-pickles-cut-out-stock-png.png",
-        "Maionese": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
-        "Ketchup": "https://static.vecteezy.com/system/resources/thumbnails/054/649/666/small/ketchup-dollop-with-shiny-texture-and-vibrant-red-color-on-isolated-background-for-food-design-and-culinary-visuals-png.png",
-        "Queijo": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
-        "Bacon": "https://static.vecteezy.com/system/resources/previews/025/222/207/non_2x/bacon-slices-isolated-on-transparent-background-png.png",
-        "Pão com gergelim": "https://example.com/pao_gergelim.png",
         "Hambúrguer grelhado": "https://example.com/hamburguer.png",
         "Pão": "https://example.com/pao.png",
         "Frango empanado": "https://example.com/frango_empanado.png",
@@ -89,13 +80,6 @@ def main(page: ft.Page):
             "quantidade": ing["quantidade"],
             "preco": ing["preco"],
             "imagem": imagens_ingredientes.get(ing["nome"], "https://example.com/placeholder.png")
-        })
-    for ing in ingredientes_extras:
-        ingredientes.append({
-            "nome": ing["nome"],
-            "quantidade": ing["quantidade"],
-            "preco": ing["preco"],
-            "imagem": ing["imagem"]
         })
 
     # Função para calcular o preço total

@@ -13,8 +13,6 @@ itens_lanche = [
             {"nome": "Hambúrguer grelhado", "quantidade": 1},
             {"nome": "Alface", "quantidade": 2},
             {"nome": "Tomate", "quantidade": 2},
-            {"nome": "Maionese", "quantidade": 1},
-            {"nome": "Ketchup", "quantidade": 1},
             {"nome": "Picles", "quantidade": 4},
             {"nome": "Cebola", "quantidade": 2}
         ],
@@ -28,7 +26,6 @@ itens_lanche = [
             {"nome": "Pão", "quantidade": 1},
             {"nome": "Frango empanado", "quantidade": 1},
             {"nome": "Alface", "quantidade": 2},
-            {"nome": "Maionese", "quantidade": 1}
         ],
         "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/BK-Chicken-Crispy-thumb.png?mtime=20230125075509&focal=none",
         "categoria": "frango"
