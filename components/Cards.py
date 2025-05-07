@@ -10,11 +10,8 @@ def botao_bk_style(
     altura: int = 350,
     cor_texto: str = "white",
     cor_fundo_texto: str = "orange",
+    data=None,  # Adicionado para suportar o atributo data
 ):
-
-
-
-    #parametros do botão 
     botao = ft.Container(
         width=largura,
         height=altura,
@@ -46,5 +43,6 @@ def botao_bk_style(
         border_radius=8,
         ink=True,
         on_click=on_click,
+        data=data,  # Atribui o data ao Container
     )
     return botao
