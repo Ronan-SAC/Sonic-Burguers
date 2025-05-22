@@ -1,9 +1,10 @@
 import flet as ft
 from Views.PedidosCategoria import itens_lanche
 import copy
+import uuid
 
 def main(page: ft.Page):
-    page.title = "Modificar Lanche"
+    page.title = "Modificar Item"
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = 20
     page.bgcolor = ft.Colors.AMBER_100
@@ -26,7 +27,7 @@ def main(page: ft.Page):
         )
 
     title = ft.Text(
-        "Modifique Seu Lanche",
+        "Modifique Seu Item",
         size=32,
         weight=ft.FontWeight.BOLD,
         color=ft.Colors.BLACK,
@@ -49,47 +50,101 @@ def main(page: ft.Page):
         text_align=ft.TextAlign.CENTER
     )
 
-    ingredientes_base = [
-        {**ing, "preco": preco} for ing, preco in [
-            (ing, {
-                "Pão com gergelim": 2.00, "Hambúrguer grelhado": 10.00, "Alface": 1.00, "Tomate": 1.50,
-                "Maionese": 0.50, "Ketchup": 0.50, "Picles": 0.75, "Cebola": 0.80,
-                "Pão": 1.50, "Frango empanado": 8.00
-            }.get(ing["nome"], 1.00)) for ing in lanche_info.get("ingredientes", [])
+    # Verificar tipo de item
+    item_original = next((i for i in itens_lanche if i["nome"] == lanche_info["nome"]), None)
+    is_hamburger = "ingredientes" in item_original
+    is_combo = "combo_componentes" in item_original
+    is_tamanho = not is_hamburger and not is_combo and "tamanhos" in item_original
+
+    ingredientes = []
+    tamanhos = []
+    combo_componentes = {}
+    tamanho_selecionado = ft.Ref[ft.Dropdown]()
+    hamburguer_selecionado = ft.Ref[ft.Dropdown]()
+    bebida_selecionada = ft.Ref[ft.Dropdown]()
+    acompanhamento_selecionado = ft.Ref[ft.Dropdown]()
+    brinquedo_selecionado = ft.Ref[ft.Dropdown]()
+
+    if is_hamburger:
+        # Configuração para hambúrgueres
+        ingredientes_base = [
+            {**ing, "preco": preco} for ing, preco in [
+                (ing, {
+                    "Pão com gergelim": 2.00, "Hambúrguer grelhado": 10.00, "Alface": 1.00, "Tomate": 1.50,
+                    "Maionese": 0.50, "Ketchup": 0.50, "Picles": 0.75, "Cebola": 0.80,
+                    "Pão": 1.50, "Frango empanado": 8.00
+                }.get(ing["nome"], 1.00)) for ing in lanche_info.get("ingredientes", [])
+            ]
         ]
-    ]
 
-    imagens_ingredientes = {
-        "Alface": "https://cdn.awsli.com.br/600x450/502/502061/produto/18350026/904bfc2e10.jpg",
-        "Tomate": "https://static.vecteezy.com/system/resources/thumbnails/045/911/368/small/a-tomato-is-cut-in-half-and-has-a-small-drop-of-water-on-it-stock-png.png",
-        "Cebola": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
-        "Picles": "https://static.vecteezy.com/system/resources/previews/045/905/548/non_2x/stack-of-sliced-pickles-cut-out-stock-png.png",
-        "Hambúrguer grelhado": "https://example.com/hamburguer.png",
-        "Pão": "https://example.com/pao.png",
-        "Frango empanado": "https://example.com/frango_empanado.png",
-    }
+        imagens_ingredientes = {
+            "Alface": "https://cdn.awsli.com.br/600x450/502/502061/produto/18350026/904bfc2e10.jpg",
+            "Tomate": "https://static.vecteezy.com/system/resources/thumbnails/045/911/368/small/a-tomato-is-cut-in-half-and-has-a-small-drop-of-water-on-it-stock-png.png",
+            "Cebola": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
+            "Picles": "https://static.vecteezy.com/system/resources/previews/045/905/548/non_2x/stack-of-sliced-pickles-cut-out-stock-png.png",
+            "Hambúrguer grelhado": "https://example.com/hamburguer.png",
+            "Pão": "https://example.com/pao.png",
+            "Frango empanado": "https://example.com/frango_empanado.png",
+        }
 
-    ingredientes = [
-        {
-            "nome": ing["nome"],
-            "quantidade": ing["quantidade"],
-            "preco": ing["preco"],
-            "imagem": imagens_ingredientes.get(ing["nome"], "https://example.com/placeholder.png")
-        } for ing in ingredientes_base
-    ]
+        ingredientes = [
+            {
+                "nome": ing["nome"],
+                "quantidade": ing["quantidade"],
+                "preco": ing["preco"],
+                "imagem": imagens_ingredientes.get(ing["nome"], "https://example.com/placeholder.png")
+            } for ing in ingredientes_base
+        ]
+    elif is_tamanho:
+        # Configuração para itens com tamanhos
+        tamanhos = item_original.get("tamanhos", [])
+        lanche_info["tamanho"] = lanche_info.get("tamanho", tamanhos[1]["nome"] if tamanhos else "Médio")
+    elif is_combo:
+        # Configuração para combos
+        combo_componentes = item_original.get("combo_componentes", {})
+        lanche_info["combo_selecoes"] = lanche_info.get("combo_selecoes", {
+            "hamburguer": combo_componentes["hamburguer"][0]["nome"],
+            "bebida": combo_componentes["bebida"][0]["nome"],
+            "acompanhamento": combo_componentes["acompanhamento"][0]["nome"],
+            "brinquedo": combo_componentes.get("brinquedo", [None])[0]["nome"] if "brinquedo" in combo_componentes else None
+        })
 
     def calcular_preco_total():
-        total = lanche_info["valor"]
-        for ing in ingredientes:
-            quantidade_original = next(
-                (i["quantidade"] for i in ingredientes_base if i["nome"] == ing["nome"]), 0
-            )
-            quantidade_adicional = ing["quantidade"] - quantidade_original
-            if quantidade_adicional > 0:
-                total += quantidade_adicional * ing["preco"]
-            elif quantidade_adicional < 0:
-                total += quantidade_adicional * ing["preco"]
-        return max(total, 0)
+        if is_hamburger:
+            total = item_original["valor"]
+            for ing in ingredientes:
+                quantidade_original = next(
+                    (i["quantidade"] for i in ingredientes_base if i["nome"] == ing["nome"]), 0
+                )
+                quantidade_adicional = ing["quantidade"] - quantidade_original
+                if quantidade_adicional > 0:
+                    total += quantidade_adicional * ing["preco"]
+                elif quantidade_adicional < 0:
+                    total += quantidade_adicional * ing["preco"]
+            return max(total, 0)
+        elif is_tamanho:
+            selected_tamanho = tamanho_selecionado.current.value if tamanho_selecionado.current else tamanhos[1]["nome"]
+            tamanho_info = next((t for t in tamanhos if t["nome"] == selected_tamanho), None)
+            return tamanho_info["preco"] if tamanho_info else item_original["valor"]
+        elif is_combo:
+            total = 0  # Start from 0 to sum the selected components
+            selecoes = lanche_info["combo_selecoes"]
+            # Preço do hambúrguer
+            hamburguer_item = next((h for h in combo_componentes["hamburguer"] if h["nome"] == selecoes["hamburguer"]), None)
+            total += hamburguer_item["valor"] if hamburguer_item else combo_componentes["hamburguer"][0]["valor"]
+            # Preço da bebida
+            bebida_item = next((b for b in combo_componentes["bebida"] if b["nome"] == selecoes["bebida"]), None)
+            total += bebida_item["valor"] if bebida_item else combo_componentes["bebida"][0]["valor"]
+            # Preço do acompanhamento
+            acompanhamento_item = next((a for a in combo_componentes["acompanhamento"] if a["nome"] == selecoes["acompanhamento"]), None)
+            total += acompanhamento_item["valor"] if acompanhamento_item else combo_componentes["acompanhamento"][0]["valor"]
+            # Preço do brinquedo (apenas Combo 2)
+            if selecoes.get("brinquedo") and selecoes["brinquedo"] != "Nenhum":
+                brinquedo_item = next((b for b in combo_componentes.get("brinquedo", []) if b["nome"] == selecoes["brinquedo"]), None)
+                total += brinquedo_item["valor"] if brinquedo_item else 0
+            # Apply a discount to make combo pricing attractive (optional)
+            total = total * 0.9  # 10% discount for combo
+            return max(total, 0)
 
     ingredientes_controls = []
 
@@ -124,7 +179,7 @@ def main(page: ft.Page):
                         icon=ft.icons.ADD,
                         icon_color=ft.Colors.WHITE,
                         bgcolor=ft.Colors.GREEN_700,
-                        disabled=ingrediente["quantidade"] >= 5,  # Disable when quantity reaches 5
+                        disabled=ingrediente["quantidade"] >= 5,
                         on_click=lambda e, ing=ingrediente, txt=texto_quantidade: atualizar_quantidade(ing, 1, txt),
                         style=ft.ButtonStyle(shape=ft.CircleBorder()),
                     ),
@@ -197,6 +252,114 @@ def main(page: ft.Page):
             atualizar_ingredientes_controls()
             page.update()
 
+    def on_componente_change(e):
+        if is_combo:
+            lanche_info["combo_selecoes"] = {
+                "hamburguer": hamburguer_selecionado.current.value,
+                "bebida": bebida_selecionada.current.value,
+                "acompanhamento": acompanhamento_selecionado.current.value,
+                "brinquedo": brinquedo_selecionado.current.value if brinquedo_selecionado.current and brinquedo_selecionado.current.value != "Nenhum" else None
+            }
+        preco_texto.value = f"Preço: R${calcular_preco_total():.2f}"
+        page.update()
+
+    # Controles para combos
+    combo_controls = []
+    if is_combo:
+        combo_controls.append(
+            ft.Container(
+                content=ft.Dropdown(
+                    ref=hamburguer_selecionado,
+                    label="Hambúrguer",
+                    value=lanche_info["combo_selecoes"]["hamburguer"],
+                    options=[ft.dropdown.Option(h["nome"]) for h in combo_componentes["hamburguer"]],
+                    on_change=on_componente_change,
+                    width=200,
+                    bgcolor=ft.Colors.WHITE,
+                    border_color=ft.Colors.GREY_300,
+                    text_size=16
+                ),
+                padding=10,
+                bgcolor=ft.Colors.WHITE,
+                border_radius=10,
+                margin=ft.margin.only(bottom=10),
+                border=ft.border.all(1, ft.Colors.GREY_300)
+            )
+        )
+        combo_controls.append(
+            ft.Container(
+                content=ft.Dropdown(
+                    ref=bebida_selecionada,
+                    label="Bebida",
+                    value=lanche_info["combo_selecoes"]["bebida"],
+                    options=[ft.dropdown.Option(b["nome"]) for b in combo_componentes["bebida"]],
+                    on_change=on_componente_change,
+                    width=200,
+                    bgcolor=ft.Colors.WHITE,
+                    border_color=ft.Colors.GREY_300,
+                    text_size=16
+                ),
+                padding=10,
+                bgcolor=ft.Colors.WHITE,
+                border_radius=10,
+                margin=ft.margin.only(bottom=10),
+                border=ft.border.all(1, ft.Colors.GREY_300)
+            )
+        )
+        combo_controls.append(
+            ft.Container(
+                content=ft.Dropdown(
+                    ref=acompanhamento_selecionado,
+                    label="Acompanhamento",
+                    value=lanche_info["combo_selecoes"]["acompanhamento"],
+                    options=[ft.dropdown.Option(a["nome"]) for a in combo_componentes["acompanhamento"]],
+                    on_change=on_componente_change,
+                    width=200,
+                    bgcolor=ft.Colors.WHITE,
+                    border_color=ft.Colors.GREY_300,
+                    text_size=16
+                ),
+                padding=10,
+                bgcolor=ft.Colors.WHITE,
+                border_radius=10,
+                margin=ft.margin.only(bottom=10),
+                border=ft.border.all(1, ft.Colors.GREY_300)
+            )
+        )
+        if "brinquedo" in combo_componentes:
+            combo_controls.append(
+                ft.Container(
+                    content=ft.Dropdown(
+                        ref=brinquedo_selecionado,
+                        label="Brinquedo",
+                        value=lanche_info["combo_selecoes"]["brinquedo"] or "Nenhum",
+                        options=[ft.dropdown.Option("Nenhum")] + [ft.dropdown.Option(b["nome"]) for b in combo_componentes["brinquedo"]],
+                        on_change=on_componente_change,
+                        width=200,
+                        bgcolor=ft.Colors.WHITE,
+                        border_color=ft.Colors.GREY_300,
+                        text_size=16
+                    ),
+                    padding=10,
+                    bgcolor=ft.Colors.WHITE,
+                    border_radius=10,
+                    margin=ft.margin.only(bottom=10),
+                    border=ft.border.all(1, ft.Colors.GREY_300)
+                )
+            )
+
+    tamanho_dropdown = ft.Dropdown(
+        ref=tamanho_selecionado,
+        label="Tamanho",
+        value=lanche_info.get("tamanho", tamanhos[1]["nome"] if tamanhos else "Médio"),
+        options=[ft.dropdown.Option(t["nome"]) for t in tamanhos],
+        on_change=on_componente_change,
+        width=200,
+        bgcolor=ft.Colors.WHITE,
+        border_color=ft.Colors.GREY_300,
+        text_size=16
+    ) if is_tamanho else None
+
     main_container = ft.Container(
         content=ft.Column(
             [
@@ -205,7 +368,7 @@ def main(page: ft.Page):
                 lanche_name,
                 preco_texto,
                 ft.Column(
-                    [],  # Will be populated by atualizar_ingredientes_controls
+                    combo_controls if is_combo else (ingredientes_controls if is_hamburger else [tamanho_dropdown] if tamanho_dropdown else []),
                     spacing=0,
                     scroll=ft.ScrollMode.AUTO,
                     expand=True
@@ -252,11 +415,21 @@ def main(page: ft.Page):
     )
 
     def confirmar():
-        novos_ingredientes = [
-            {"nome": ing["nome"], "quantidade": ing["quantidade"]}
-            for ing in ingredientes if ing["quantidade"] > 0
-        ]
-        lanche_info["ingredientes"] = novos_ingredientes
+        if is_hamburger:
+            novos_ingredientes = [
+                {"nome": ing["nome"], "quantidade": ing["quantidade"]}
+                for ing in ingredientes if ing["quantidade"] > 0
+            ]
+            lanche_info["ingredientes"] = novos_ingredientes
+        elif is_tamanho:
+            lanche_info["tamanho"] = tamanho_selecionado.current.value if tamanho_selecionado.current else tamanhos[1]["nome"]
+        elif is_combo:
+            lanche_info["combo_selecoes"] = {
+                "hamburguer": hamburguer_selecionado.current.value,
+                "bebida": bebida_selecionada.current.value,
+                "acompanhamento": acompanhamento_selecionado.current.value,
+                "brinquedo": brinquedo_selecionado.current.value if brinquedo_selecionado.current and brinquedo_selecionado.current.value != "Nenhum" else None
+            }
         lanche_info["valor"] = calcular_preco_total()
         page.session.set("carrinho_itens", carrinho_itens)
         page.go(f"/pedidos/{lanche_info['categoria']}")
@@ -266,7 +439,10 @@ def main(page: ft.Page):
         page.go(f"/pedidos/{lanche_info['categoria']}")
         page.update()
 
-    atualizar_ingredientes_controls()  # Populate initial controls
+    if is_hamburger:
+        atualizar_ingredientes_controls()
+    else:
+        preco_texto.value = f"Preço: R${calcular_preco_total():.2f}"
 
     return ft.View(
         route=f"/Editar_Pedido/{item_id}",

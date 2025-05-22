@@ -34,42 +34,100 @@ itens_lanche = [
     {
         "nome": "Fries",
         "valor": 12.90,
-        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR98FtNSxebKF-I5dZEgSf9QbFCaGQ4XRVzA&s",
+        "tamanhos": [
+            {"nome": "Pequeno", "preco": 8.90},
+            {"nome": "Médio", "preco": 12.90},
+            {"nome": "Grande", "preco": 15.90}
+        ],
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
         "categoria": "acompanhamentos"
     },
     {
         "nome": "Nuggets",
         "valor": 19.90,
+        "tamanhos": [
+            {"nome": "4 Peças", "preco": 12.90},
+            {"nome": "6 Peças", "preco": 19.90},
+            {"nome": "10 Peças", "preco": 25.90}
+        ],
         "imagem": "https://wp-cdn.typhur.com/wp-content/uploads/2025/02/air-fryer-frozen-chicken-nuggets.jpg",
         "categoria": "frango"
     },
     {
         "nome": "Combo 1",
         "valor": 39.90,
+        "combo_componentes": {
+            "hamburguer": [
+                {"nome": "Whopper", "valor": 29.90},
+                {"nome": "Chicken", "valor": 24.90}
+            ],
+            "bebida": [
+                {"nome": "Soda", "valor": 9.90},
+                {"nome": "Shake", "valor": 14.90}
+            ],
+            "acompanhamento": [
+                {"nome": "Fries", "valor": 12.90},
+                {"nome": "Nuggets", "valor": 19.90}
+            ]
+        },
         "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/1-C-Chicken-Crispy-app-thumb-cupom-m-d.png?mtime=20230703165033&focal=none",
         "categoria": "combos"
     },
     {
         "nome": "Combo 2",
         "valor": 44.90,
+        "combo_componentes": {
+            "hamburguer": [
+                {"nome": "Whopper", "valor": 29.90},
+                {"nome": "Chicken", "valor": 24.90}
+            ],
+            "bebida": [
+                {"nome": "Soda", "valor": 9.90},
+                {"nome": "Shake", "valor": 14.90}
+            ],
+            "acompanhamento": [
+                {"nome": "Fries", "valor": 12.90},
+                {"nome": "Nuggets", "valor": 19.90}
+            ],
+            "brinquedo": [
+                {"nome": "Carro", "valor": 5.00},
+                {"nome": "Boneca", "valor": 5.00},
+                {"nome": "Quebra-cabeça", "valor": 5.00}
+            ]
+        },
         "imagem": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
         "categoria": "combos"
     },
     {
         "nome": "Soda",
         "valor": 9.90,
+        "tamanhos": [
+            {"nome": "Pequeno", "preco": 7.90},
+            {"nome": "Médio", "preco": 9.90},
+            {"nome": "Grande", "preco": 11.90}
+        ],
         "imagem": "https://upload.wikimedia.org/wikipedia/commons/e/e8/15-09-26-RalfR-WLC-0098_-_Coca-Cola_glass_bottle_%28Germany%29.jpg",
         "categoria": "bebidas_sobremesas"
     },
     {
         "nome": "Shake",
         "valor": 14.90,
+        "tamanhos": [
+            {"nome": "Pequeno", "preco": 10.90},
+            {"nome": "Médio", "preco": 14.90},
+            {"nome": "Grande", "preco": 17.90}
+        ],
         "imagem": "https://static.itdg.com.br/images/1200-630/ee9c780da91c8377e7f6a10f30c6c1da/milk-shake-caseiro.jpg",
         "categoria": "bebidas_sobremesas"
     },
     {
         "nome": "Dessert",
         "valor": 7.90,
+        "tamanhos": [
+            {"nome": "Pequeno", "preco": 5.90},
+            {"nome": "Médio", "preco": 7.90},
+            {"nome": "Grande", "preco": 9.90}
+        ],
         "imagem": "https://images.rappi.com.br/restaurants_background/sobremesas_burger_king-1662576783697.jpg?e=webp&d=700x100&q=10",
         "categoria": "bebidas_sobremesas"
     },
