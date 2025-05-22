@@ -1,6 +1,9 @@
 import flet as ft
 import os
 import sys
+import uuid
+import copy
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from components.Cards import botao_bk_style
 
@@ -9,7 +12,6 @@ itens_lanche = [
         "nome": "Whopper",
         "valor": 29.90,
         "ingredientes": [
-            {"nome": "Pão com gergelim", "quantidade": 1},
             {"nome": "Hambúrguer grelhado", "quantidade": 1},
             {"nome": "Alface", "quantidade": 2},
             {"nome": "Tomate", "quantidade": 2},
@@ -23,7 +25,6 @@ itens_lanche = [
         "nome": "Chicken",
         "valor": 24.90,
         "ingredientes": [
-            {"nome": "Pão", "quantidade": 1},
             {"nome": "Frango empanado", "quantidade": 1},
             {"nome": "Alface", "quantidade": 2},
         ],
@@ -51,7 +52,7 @@ itens_lanche = [
     {
         "nome": "Combo 2",
         "valor": 44.90,
-        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQREHs1qMFNx8TTFiplwEzfbhwuT6vTfw6zrQ&s",
+        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
         "categoria": "combos"
     },
     {
@@ -75,98 +76,89 @@ itens_lanche = [
 ]
 
 def main(page: ft.Page):
-    # Extrai a categoria da rota
     categoria = page.route.split("/")[-1] if page.route.startswith("/pedidos/") else "carne"
-
-    # Filtra os itens pela categoria
     itens_filtrados = [item for item in itens_lanche if item.get("categoria") == categoria]
 
-    # Carrega o carrinho da sessão ou inicializa uma lista vazia
     carrinho_itens = page.session.get("carrinho_itens")
     if carrinho_itens is None:
         carrinho_itens = []
         page.session.set("carrinho_itens", carrinho_itens)
 
-    # Função para voltar
     def voltar(e):
-        page.go("/tipo_pedido")  # Volta para a página de seleção de categorias
+        page.go("/tipo_pedido")
 
-    # Função para atualizar o carrinho na interface
     def atualizar_carrinho():
         carrinho_lista.controls.clear()
         total = 0
         for item in carrinho_itens:
-            item_info = next((i for i in itens_lanche if i["nome"] == item), None)
-            if item_info:
-                total += item_info["valor"]
-                ingredientes_texto = ", ".join([f"{ing['nome']} ({ing['quantidade']})" for ing in item_info.get("ingredientes", [])])
-                carrinho_lista.controls.append(
-                    ft.Container(
-                        content=ft.Row(
-                            controls=[
-                                ft.Icon(ft.icons.FASTFOOD, color=ft.Colors.ORANGE_700, size=24),
-                                ft.Column(
-                                    controls=[
-                                        ft.Text(f"{item}", weight=ft.FontWeight.BOLD, size=16),
-                                        ft.Text(f"R${item_info['valor']:.2f}", color=ft.Colors.GREY_700, size=14),
-                                        ft.Text(f"Ingredientes: {ingredientes_texto}", size=12, color=ft.Colors.GREY_600, italic=True) if ingredientes_texto else ft.Text(""),
-                                    ],
-                                    spacing=5,
-                                    expand=True
-                                ),
-                                ft.IconButton(
-                                    icon=ft.icons.DELETE_OUTLINE,
-                                    icon_color=ft.Colors.RED_400,
-                                    on_click=lambda e, item=item: remover_item(item)
-                                ),
-                                ft.IconButton(
-                                    icon=ft.icons.EDIT_OUTLINED,
-                                    icon_color=ft.Colors.BLUE_400,
-                                    on_click=lambda e, item=item: editar_lanche(item)
-                                )
-                            ],
-                            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-                        ),
-                        bgcolor=ft.Colors.WHITE,
-                        padding=10,
-                        border_radius=10,
-                        margin=ft.margin.only(bottom=8),
-                        shadow=ft.BoxShadow(
-                            spread_radius=1,
-                            blur_radius=5,
-                            color=ft.Colors.BLACK12,
-                            offset=ft.Offset(0, 2)
-                        )
+            total += item["valor"]
+            ingredientes_texto = ", ".join([f"{ing['nome']} ({ing['quantidade']})" for ing in item.get("ingredientes", [])])
+            carrinho_lista.controls.append(
+                ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            ft.Icon(ft.icons.FASTFOOD, color=ft.Colors.ORANGE_700, size=24),
+                            ft.Column(
+                                controls=[
+                                    ft.Text(f"{item['nome']}", weight=ft.FontWeight.BOLD, size=16),
+                                    ft.Text(f"R${item['valor']:.2f}", color=ft.Colors.GREY_700, size=14),
+                                    ft.Text(f"Ingredientes: {ingredientes_texto}", size=12, color=ft.Colors.GREY_600, italic=True) if ingredientes_texto else ft.Text(""),
+                                ],
+                                spacing=5,
+                                expand=True
+                            ),
+                            ft.IconButton(
+                                icon=ft.icons.DELETE_OUTLINE,
+                                icon_color=ft.Colors.RED_400,
+                                on_click=lambda e, item_id=item["id"]: remover_item(item_id)
+                            ),
+                            ft.IconButton(
+                                icon=ft.icons.EDIT_OUTLINED,
+                                icon_color=ft.Colors.BLUE_400,
+                                on_click=lambda e, item_id=item["id"]: editar_lanche(item_id)
+                            )
+                        ],
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    ),
+                    bgcolor=ft.Colors.WHITE,
+                    padding=10,
+                    border_radius=10,
+                    margin=ft.margin.only(bottom=8),
+                    shadow=ft.BoxShadow(
+                        spread_radius=1,
+                        blur_radius=5,
+                        color=ft.Colors.BLACK12,
+                        offset=ft.Offset(0, 2)
                     )
                 )
+            )
         carrinho_lista.controls.append(
             ft.Container(
-                content=ft.Text(f"Total: R${total:.2f}", weight=ft.FontWeight.BOLD, size=18, color=ft.Colors.BLACK87),
+                content=ft.Text(f"Total: R${total:.2f}", weight=ft.FontWeight.BOLD, size=18, color=ft.Colors.BLACK),
                 padding=10,
                 alignment=ft.alignment.center_right
             )
         )
-        # Salva o carrinho na sessão
         page.session.set("carrinho_itens", carrinho_itens)
         page.update()
 
-    # Função para remover item do carrinho
-    def remover_item(item):
-        carrinho_itens.remove(item)
+    def remover_item(item_id):
+        carrinho_itens[:] = [item for item in carrinho_itens if item["id"] != item_id]
         atualizar_carrinho()
 
-    # Função para editar lanche
-    def editar_lanche(item):
-        page.go(f"/Editar_Pedido/{item}")
+    def editar_lanche(item_id):
+        page.go(f"/Editar_Pedido/{item_id}")
         page.update()
 
-    # Função de clique nos botões do menu
     def on_botao_click(e):
-        item_nome = e.control.content.controls[1].content.value  # Pega o nome do item
-        carrinho_itens.append(item_nome)  # Adiciona o item ao carrinho
-        atualizar_carrinho()  # Atualiza a visualização do carrinho
+        item_nome = e.control.content.controls[1].content.value
+        item_original = next((i for i in itens_lanche if i["nome"] == item_nome), None)
+        if item_original:
+            item_carrinho = copy.deepcopy(item_original)
+            item_carrinho["id"] = str(uuid.uuid4())
+            carrinho_itens.append(item_carrinho)
+            atualizar_carrinho()
 
-    # Função para finalizar o pedido
     def finalizar_pedido(e):
         if carrinho_itens:
             page.snack_bar = ft.SnackBar(
@@ -174,7 +166,7 @@ def main(page: ft.Page):
                 bgcolor=ft.Colors.GREEN_600
             )
             page.snack_bar.open = True
-            carrinho_itens.clear()  # Limpa o carrinho
+            carrinho_itens.clear()
             atualizar_carrinho()
         else:
             page.snack_bar = ft.SnackBar(
@@ -184,7 +176,6 @@ def main(page: ft.Page):
             page.snack_bar.open = True
         page.update()
 
-    # Botão de voltar
     botao_voltar = ft.IconButton(
         icon=ft.icons.ARROW_BACK,
         icon_color=ft.Colors.WHITE,
@@ -197,7 +188,6 @@ def main(page: ft.Page):
         )
     )
 
-    # Grid com os itens filtrados
     grid = ft.Column(
         controls=[
             ft.Row(
@@ -215,13 +205,11 @@ def main(page: ft.Page):
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
-    # Imagem do topo
     imagem_topo = ft.Image(
         src="./assets/Header/Header.png",
         fit=ft.ImageFit.COVER,
     )
 
-    # Lista de itens do carrinho
     carrinho_lista = ft.Column(
         controls=[],
         scroll=ft.ScrollMode.AUTO,
@@ -237,19 +225,18 @@ def main(page: ft.Page):
         shadow=ft.BoxShadow(
             spread_radius=2,
             blur_radius=10,
-            color=ft.Colors.BLACK26,
+            color=ft.Colors.BLACK,
             offset=ft.Offset(0, 4)
         )
     )
 
-    # Carrinho na parte inferior
     carrinho = ft.Container(
         content=ft.Column(
             controls=[
                 ft.Row(
                     controls=[
                         ft.Icon(ft.icons.SHOPPING_CART, color=ft.Colors.ORANGE_700, size=28),
-                        ft.Text("Seu Carrinho", size=22, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK87),
+                        ft.Text("Seu Carrinho", size=22, weight=ft.FontWeight.BOLD, color=ft.Colors.BLACK),
                     ],
                     alignment=ft.MainAxisAlignment.START,
                     spacing=10
@@ -287,12 +274,11 @@ def main(page: ft.Page):
         shadow=ft.BoxShadow(
             spread_radius=2,
             blur_radius=10,
-            color=ft.Colors.BLACK26,
+            color=ft.Colors.BLACK,
             offset=ft.Offset(0, -2)
         )
     )
 
-    # Conteúdo principal
     conteudo = ft.Column(
         controls=[
             imagem_topo,
@@ -317,7 +303,6 @@ def main(page: ft.Page):
         expand=True
     )
 
-    # Atualiza o carrinho na inicialização
     atualizar_carrinho()
 
     return ft.View(
