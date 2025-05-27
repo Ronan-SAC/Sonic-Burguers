@@ -3,6 +3,9 @@ import os
 import sys
 import uuid
 import copy
+import json
+
+from Controllers.UsersControllers import Controller_user
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from components.Cards import botao_bk_style
@@ -134,6 +137,7 @@ itens_lanche = [
 ]
 
 def main(page: ft.Page):
+    controller = Controller_user()
     categoria = page.route.split("/")[-1] if page.route.startswith("/pedidos/") else "carne"
     itens_filtrados = [item for item in itens_lanche if item.get("categoria") == categoria]
 
@@ -145,12 +149,22 @@ def main(page: ft.Page):
     def voltar(e):
         page.go("/tipo_pedido")
 
+    def logout():
+        page.session.remove("user_id") if page.session.contains_key("user_id") else None
+        page.session.remove("user_name") if page.session.contains_key("user_name") else None
+        page.session.set("carrinho_itens", [])
+        page.go("/")
+        page.update()
+
     def atualizar_carrinho():
         carrinho_lista.controls.clear()
         total = 0
         for item in carrinho_itens:
             total += item["valor"]
             ingredientes_texto = ", ".join([f"{ing['nome']} ({ing['quantidade']})" for ing in item.get("ingredientes", [])])
+            combo_texto = ", ".join([f"{k}: {v}" for k, v in item.get("combo_selecoes", {}).items() if v and k != "brinquedo"]) + (f", Brinquedo: {item['combo_selecoes']['brinquedo']}" if item.get("combo_selecoes", {}).get("brinquedo") else "") if item.get("combo_selecoes") else ""
+            tamanho_texto = f"Tamanho: {item.get('tamanho', '')}" if item.get("tamanho") else ""
+            detalhes_texto = ", ".join(filter(None, [ingredientes_texto, combo_texto, tamanho_texto]))
             carrinho_lista.controls.append(
                 ft.Container(
                     content=ft.Row(
@@ -160,7 +174,7 @@ def main(page: ft.Page):
                                 controls=[
                                     ft.Text(f"{item['nome']}", weight=ft.FontWeight.BOLD, size=16),
                                     ft.Text(f"R${item['valor']:.2f}", color=ft.Colors.GREY_700, size=14),
-                                    ft.Text(f"Ingredientes: {ingredientes_texto}", size=12, color=ft.Colors.GREY_600, italic=True) if ingredientes_texto else ft.Text(""),
+                                    ft.Text(f"Detalhes: {detalhes_texto}", size=12, color=ft.Colors.GREY_600, italic=True) if detalhes_texto else ft.Text(""),
                                 ],
                                 spacing=5,
                                 expand=True
@@ -219,6 +233,52 @@ def main(page: ft.Page):
 
     def finalizar_pedido(e):
         if carrinho_itens:
+            user_name = page.session.get("user_name") if page.session.contains_key("user_name") else "Anônimo"
+            user_id = page.session.get("user_id") if page.session.contains_key("user_id") else None
+            total = 0
+            nota_fiscal = {
+                "id": str(uuid.uuid4())[:8],
+                "items": []
+            }
+            print("=== Nota Fiscal ===")
+            print(f"Cliente: {user_name}")
+            print(f"Nota Fiscal: {nota_fiscal['id']}")
+            print("-" * 30)
+            for item in carrinho_itens:
+                total += item["valor"]
+                ingredientes_texto = ", ".join([f"{ing['nome']} ({ing['quantidade']})" for ing in item.get("ingredientes", [])]) if item.get("ingredientes") else "Sem ingredientes adicionais"
+                combo_texto = ", ".join([f"{k}: {v}" for k, v in item.get("combo_selecoes", {}).items() if v and k != "brinquedo"]) + (f", Brinquedo: {item['combo_selecoes']['brinquedo']}" if item.get("combo_selecoes", {}).get("brinquedo") else "") if item.get("combo_selecoes") else ""
+                tamanho_texto = f"Tamanho: {item.get('tamanho', '')}" if item.get("tamanho") else ""
+                detalhes_texto = ", ".join(filter(None, [ingredientes_texto, combo_texto, tamanho_texto]))
+                print(f"Item: {item['nome']}")
+                print(f"Valor: R${item['valor']:.2f}")
+                print(f"Detalhes: {detalhes_texto}")
+                print("-" * 30)
+                nota_fiscal["items"].append({
+                    "nome": item["nome"],
+                    "valor": item["valor"],
+                    "detalhes": detalhes_texto
+                })
+            print(f"Total do Pedido: R${total:.2f}")
+            print("==================")
+            
+            if user_id:
+                try:
+                    cursor = controller.DB.conexao.cursor()
+                    cursor.execute(
+                        "INSERT INTO historico (id_user, nota_fiscal, preco_total) VALUES (%s, %s, %s)",
+                        (user_id, json.dumps(nota_fiscal), total)
+                    )
+                    controller.DB.conexao.commit()
+                    cursor.close()
+                except Exception as e:
+                    print(f"Erro ao salvar no histórico: {str(e)}")
+                    page.snack_bar = ft.SnackBar(
+                        content=ft.Text(f"Erro ao salvar histórico: {str(e)}", color=ft.Colors.WHITE),
+                        bgcolor=ft.Colors.RED_600
+                    )
+                    page.snack_bar.open = True
+
             page.snack_bar = ft.SnackBar(
                 content=ft.Text("Pedido finalizado com sucesso!", color=ft.Colors.WHITE),
                 bgcolor=ft.Colors.GREEN_600
@@ -226,6 +286,7 @@ def main(page: ft.Page):
             page.snack_bar.open = True
             carrinho_itens.clear()
             atualizar_carrinho()
+            logout()
         else:
             page.snack_bar = ft.SnackBar(
                 content=ft.Text("Carrinho vazio!", color=ft.Colors.WHITE),

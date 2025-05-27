@@ -1,9 +1,10 @@
 import flet as ft
 from components.keyboards import criar_teclados
 from components.utils import validar_nome, validar_telefone, validar_cpf, validar_senha
+from Controllers.UsersControllers import Controller_user
 
 def main(page: ft.Page):
-    # Initialize keyboard
+    controller = Controller_user()
     keyboard = criar_teclados(page)
     
     def show_keyboard(field, keyboard_type):
@@ -16,11 +17,9 @@ def main(page: ft.Page):
             keyboard.full_keyboard.visible = True
         page.update()
 
-    # UI Elements
     logo = ft.Image(src="assets/icons/MainLogo.png", width=650, height=650)
     mensagem = ft.Text("", color=ft.Colors.BLACK, size=32)
 
-    # Input Fields
     Nome = ft.TextField(
         label="Digite seu Nome Completo",
         width=825,
@@ -78,7 +77,6 @@ def main(page: ft.Page):
     )
 
     def on_sign_click(e):
-        # Validações (removendo a máscara antes de validar)
         nome_valido, msg_nome = validar_nome(Nome.value)
         telefone_valido, msg_telefone = validar_telefone(''.join(filter(str.isdigit, Telefone.value)))
         cpf_valido, msg_cpf = validar_cpf(''.join(filter(str.isdigit, CPF_TEXT.value)))
@@ -100,12 +98,15 @@ def main(page: ft.Page):
             mensagem.value = msg_senha
             mensagem.color = ft.Colors.RED
         else:
-            mensagem.value = "Conta criada com sucesso!"
-            mensagem.color = ft.Colors.GREEN
-            page.go("/menu")
+            cpf_limpo = ''.join(filter(str.isdigit, CPF_TEXT.value))
+            telefone_limpo = ''.join(filter(str.isdigit, Telefone.value))
+            success, message = controller.adicionar(Nome.value, cpf_limpo, Senha.value, telefone_limpo)
+            mensagem.value = message
+            mensagem.color = ft.Colors.GREEN if success else ft.Colors.RED
+            if success:
+                page.go("/home")
         page.update()
 
-    # Buttons
     Logar = ft.ElevatedButton(
         "Criar Conta!",
         bgcolor=ft.Colors.RED_600,
@@ -130,7 +131,6 @@ def main(page: ft.Page):
         tooltip="Voltar para a tela inicial",
     )
 
-    # Layout
     sign_form = ft.Column(
         controls=[
             logo,
@@ -157,7 +157,6 @@ def main(page: ft.Page):
         alignment=ft.MainAxisAlignment.CENTER,
     )
 
-    # Initially hide keyboards
     keyboard.numeric_keyboard.visible = False
     keyboard.full_keyboard.visible = False
 
@@ -168,6 +167,3 @@ def main(page: ft.Page):
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         vertical_alignment=ft.MainAxisAlignment.CENTER,
     )
-
-if __name__ == "__main__":
-    ft.app(target=main)

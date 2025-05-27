@@ -12,7 +12,11 @@ def main(page: ft.Page):
 
     # Função para voltar
     def voltar(e):
-        page.go("/home")  # Redireciona para a página inicial
+        page.session.remove("user_id") if page.session.contains_key("user_id") else None
+        page.session.remove("user_name") if page.session.contains_key("user_name") else None
+        page.session.set("carrinho_itens", [])
+        page.go("/home")
+        page.update()  # Redireciona para a página inicial
 
     # Lista de categorias com seus textos, imagens e dados
     categorias = [
