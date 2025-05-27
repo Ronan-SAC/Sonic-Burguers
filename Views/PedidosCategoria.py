@@ -236,41 +236,40 @@ def main(page: ft.Page):
             user_name = page.session.get("user_name") if page.session.contains_key("user_name") else "Anônimo"
             user_id = page.session.get("user_id") if page.session.contains_key("user_id") else None
             total = 0
-            nota_fiscal = {
-                "id": str(uuid.uuid4())[:8],
-                "items": []
-            }
+            nota_fiscal_id = str(uuid.uuid4())[:8]
+            nota_fiscal_str = f"NotaFiscalID: {nota_fiscal_id}\nCliente: {user_name}\nItens:\n"
+
             print("=== Nota Fiscal ===")
             print(f"Cliente: {user_name}")
-            print(f"Nota Fiscal: {nota_fiscal['id']}")
+            print(f"Nota Fiscal: {nota_fiscal_id}")
             print("-" * 30)
+        
+            itens_str = []
             for item in carrinho_itens:
                 total += item["valor"]
                 ingredientes_texto = ", ".join([f"{ing['nome']} ({ing['quantidade']})" for ing in item.get("ingredientes", [])]) if item.get("ingredientes") else "Sem ingredientes adicionais"
                 combo_texto = ", ".join([f"{k}: {v}" for k, v in item.get("combo_selecoes", {}).items() if v and k != "brinquedo"]) + (f", Brinquedo: {item['combo_selecoes']['brinquedo']}" if item.get("combo_selecoes", {}).get("brinquedo") else "") if item.get("combo_selecoes") else ""
                 tamanho_texto = f"Tamanho: {item.get('tamanho', '')}" if item.get("tamanho") else ""
                 detalhes_texto = ", ".join(filter(None, [ingredientes_texto, combo_texto, tamanho_texto]))
+            
+                # Adicionar item à string com separador interno (por exemplo, ;)
+                item_str = f"{item['nome']};R${item['valor']:.2f};{detalhes_texto}"
+                itens_str.append(item_str)
+            
                 print(f"Item: {item['nome']}")
                 print(f"Valor: R${item['valor']:.2f}")
                 print(f"Detalhes: {detalhes_texto}")
                 print("-" * 30)
-                nota_fiscal["items"].append({
-                    "nome": item["nome"],
-                    "valor": item["valor"],
-                    "detalhes": detalhes_texto
-                })
+        
+            # Concatenar itens com quebras de linha
+            nota_fiscal_str += "\n".join(itens_str) + f"\nTotal: R${total:.2f}"
+        
             print(f"Total do Pedido: R${total:.2f}")
-            print("==================")
-            
+            print("====================================================================================")
+        
             if user_id:
                 try:
-                    cursor = controller.DB.conexao.cursor()
-                    cursor.execute(
-                        "INSERT INTO historico (id_user, nota_fiscal, preco_total) VALUES (%s, %s, %s)",
-                        (user_id, json.dumps(nota_fiscal), total)
-                    )
-                    controller.DB.conexao.commit()
-                    cursor.close()
+                    controller.DB.adicionar_historico(user_id, nota_fiscal_str)
                 except Exception as e:
                     print(f"Erro ao salvar no histórico: {str(e)}")
                     page.snack_bar = ft.SnackBar(
@@ -293,7 +292,7 @@ def main(page: ft.Page):
                 bgcolor=ft.Colors.RED_600
             )
             page.snack_bar.open = True
-        page.update()
+            page.update()
 
     botao_voltar = ft.IconButton(
         icon=ft.icons.ARROW_BACK,

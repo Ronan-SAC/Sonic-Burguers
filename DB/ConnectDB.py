@@ -75,3 +75,12 @@ class Banco_De_Dados:
         if resultado:
             return {"id_user": resultado[0], "nome": resultado[1]}
         return None
+    
+    def adicionar_historico(self, id_user, nota_fiscal):
+        cursor = self.conexao.cursor()
+        cursor.execute(
+            "INSERT INTO historico (id_user, nota_fiscal) VALUES (%s, %s)",
+            (id_user, nota_fiscal)
+        )
+        self.conexao.commit()
+        cursor.close()
