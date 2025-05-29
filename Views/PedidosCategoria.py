@@ -25,6 +25,123 @@ itens_lanche = [
         "categoria": "carne"
     },
     {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
+        "nome": "Whopper",
+        "valor": 29.90,
+        "ingredientes": [
+            {"nome": "Hambúrguer grelhado", "quantidade": 1},
+            {"nome": "Alface", "quantidade": 2},
+            {"nome": "Tomate", "quantidade": 2},
+            {"nome": "Picles", "quantidade": 4},
+            {"nome": "Cebola", "quantidade": 2}
+        ],
+        "imagem": "https://d3sn2rlrwxy0ce.cloudfront.net/_800x600_crop_center-center_none/whopper-thumb_2021-09-16-125319_mppe.png?mtime=20210916125320&focal=none&tmtime=20241024164409",
+        "categoria": "carne"
+    },
+    {
         "nome": "Chicken",
         "valor": 24.90,
         "ingredientes": [
@@ -42,7 +159,7 @@ itens_lanche = [
             {"nome": "Médio", "preco": 12.90},
             {"nome": "Grande", "preco": 15.90}
         ],
-        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
+        "imagem": "https://compote.slate.com/images/c72f30b4-4e25-46dc-b1f4-b6a7063b3d56.jpeg?width=780&height=520&rect=1558x1039&offset=2x0",
         "categoria": "acompanhamentos"
     },
     {
@@ -93,12 +210,12 @@ itens_lanche = [
                 {"nome": "Nuggets", "valor": 19.90}
             ],
             "brinquedo": [
-                {"nome": "Carro", "valor": 5.00},
-                {"nome": "Boneca", "valor": 5.00},
-                {"nome": "Quebra-cabeça", "valor": 5.00}
+                {"nome": "Sonic", "valor": 5.00},
+                {"nome": "Tails", "valor": 5.00},
+                {"nome": "Knuckles", "valor": 5.00}
             ]
         },
-        "imagem": "https://encrypted-tbn0.gstatic.com/images?q=GCSc3QvUQT1PdvLBo2QM5HzFOxoOk_0GNeqKuQ&s",
+        "imagem": "https://instagram.fcgr3-1.fna.fbcdn.net/v/t51.29350-15/449314986_934419321772947_3975521562287087351_n.jpg?stp=dst-jpg_e35_p750x750_sh0.08_tt6&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE4MDAuc2RyLmYyOTM1MC5kZWZhdWx0X2ltYWdlIn0&_nc_ht=instagram.fcgr3-1.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2QHrzhr51NOy97gX3Z4krJuocKx9SQnkfgkCDwsAUTmfDHPTMxtrweP7o5Jj8Omnutg&_nc_ohc=6EgoMPH5Y6kQ7kNvwHaaJEe&_nc_gid=4baxSiTj_DTF2vm3b827Jg&edm=ANTKIIoBAAAA&ccb=7-5&oh=00_AfKadY0oXtHi-c2RsF7LDQUT56W9gGawaAHtUPPOA6KVXQ&oe=683E8DA7&_nc_sid=d885a2",
         "categoria": "combos"
     },
     {
@@ -321,6 +438,8 @@ def main(page: ft.Page):
         ],
         spacing=10,
         scroll=ft.ScrollMode.AUTO,
+        height=750,
+        width=page.window.width - 40,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
@@ -414,7 +533,7 @@ def main(page: ft.Page):
                 padding=ft.padding.only(top=20)
             ),
             ft.Divider(height=20, color=ft.Colors.TRANSPARENT),
-            ft.Container(content=carrinho, margin=ft.margin.only(top=560))
+            ft.Container(content=carrinho, margin=ft.margin.only(top=160))
         ],
         alignment=ft.MainAxisAlignment.START,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
