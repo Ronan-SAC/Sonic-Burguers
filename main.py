@@ -18,7 +18,19 @@ def main(page: ft.Page):
     page.window.maximizable = False
     page.window.full_screen = True
     page.padding = 0
-    
+    page.theme = ft.Theme(
+        scrollbar_theme=ft.ScrollbarTheme(
+            track_visibility=False,
+            thumb_visibility=False,
+            track_border_color=ft.Colors.BLUE,
+            thumb_color={
+                ft.ControlState.HOVERED: ft.Colors.AMBER_500,
+                ft.ControlState.DEFAULT: ft.Colors.BLUE_700,
+            },
+            thickness=5,
+            radius=10,
+        )
+    )
     def route_change(route):
         page.views.clear()
         
